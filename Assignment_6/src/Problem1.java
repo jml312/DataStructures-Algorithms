@@ -24,21 +24,5 @@ public class Problem1 {
         System.out.println();
 //        depth: [0, 1, 2, 5, 3, 4]
 //        breadth: [0, 1, 4, 2, 3, 5]
-
-        // testing 5
-        boolean[][] d = {{false,true,true,true,false}, {true,false,false,false,true},{true,false,false,false,true}, {true,false,false,false,true}, {false,true,false,true,false}};
-        System.out.println("depth: " + Arrays.toString(Graph.depthFirst(d)));
-        System.out.println("breadth: " + Arrays.toString(Graph.breadthFirst(d)));
-        System.out.println();
-        // d: [0, 1, 4, 3, 2]
-        // b: [0, 1, 2, 3, 4]
-
-        // testing 5
-        boolean[][] e = {{false,true,false,true,false}, {true,false,false,false,true},{false,false,false,true,false}, {true,false,true,false,false}, {false,true,false,false,false}};
-        System.out.println("depth: " + Arrays.toString(Graph.depthFirst(e)));
-        System.out.println("breadth: " + Arrays.toString(Graph.breadthFirst(e)));
-        System.out.println();
-        // d: [0,1,4,3,2]
-        // b: [0,1,3,4,2]
     }
 }

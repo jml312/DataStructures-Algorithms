@@ -67,48 +67,36 @@ public class Graph {
     public static int[] breadthFirst(boolean[][] dists) {
         // Creates a graph with the given boolean array
         createGraphFromBooleanArray(dists);
-        // Stores the visited nodes returned from breadthFirstHelper
-        LinkedList<Integer> ll = breadthFirstHelper(0, new LinkedList<>());
-        // copies the contents of the linked list to the int array
-        int[] orderVisited = new int[ll.size()];
-        for (int i = 0; i < ll.size(); i++) {
-            orderVisited[i] = ll.get(i);
-        }
-        return orderVisited;
-    }
-
-    /** Returns a LinkedList containing all nodes in the correct order that they are visited
-     * @param i The index of the current Vertex
-     * @param ll a LinkedList to hold the order visited
-     * @return a LinkedList containing all nodes in the correct order that they are visited */
-    public static LinkedList<Integer> breadthFirstHelper(int i, LinkedList<Integer> ll) {
+        // stores the order of nodes visited
+        int[] orderVisited = new int[dists.length];
+        int index = 0;
         // checks that the Vertex is not null
-        if (vertices[i] != null) {
+        if (vertices[0] != null) {
             Queue<Vertex> q = new LinkedList<>();
             // adds the first Vertex into the queue
-            q.add(vertices[i]);
+            q.add(vertices[0]);
             // marks the Vertex as visited
-            vertices[i].markVisited();
+            vertices[0].markVisited();
             // loops while the queue is not empty
             while (!q.isEmpty()) {
                 // removes the data of the front element of the queue
                 int element = q.remove().getData();
                 // adds the element to the linked list
-                ll.add(element);
+                orderVisited[index] = element;
+                index++;
                 // loops over the edges of the current Vertex
-                for (Edge curr : vertices[element].getEdges()) {
-                    int j = curr.getTarget().getData();
+                for (Edge currentEdge : vertices[element].getEdges()) {
+                    int i = currentEdge.getTarget().getData();
                     // checks if the Vertex at index j is visited
                     // if it is not, then the Vertex is marked visited and it is added to the queue
-                    if (!vertices[j].isVisited()) {
-                        vertices[j].markVisited();
-                        q.add(vertices[j]);
+                    if (!vertices[i].isVisited()) {
+                        vertices[i].markVisited();
+                        q.add(vertices[i]);
                     }
                 }
             }
-            return ll;
         }
-        return ll;
+        return orderVisited;
     }
 
     /** Creates a graph based on a 2d boolean array
@@ -129,27 +117,45 @@ public class Graph {
     }
 
 
+    /** Returns the minimum total distance of N-1 vertices (the shortest distance of the minimum spanning tree of a graph)
+     * @param dists The distances between each Vertex
+     * @return the minimum total distance of N-1 vertices */
     public static int minDistance(int[][] dists) {
+        // creates a graph from the given int array
         createGraphFromIntArray(dists);
+        // returns the minimum distance
         return getMinDistance(dists, 0);
     }
 
 
-    public static int getMinDistance(int[][] graph, int minDistance) {
+    /** Returns the minimum distance of a graph's minimum spanning tree
+     * @param dists The distances between each Vertex
+     * @param minDistance The total distance travelled in the minimum spanning tree of the graph
+     * @return The minimum distance of a graph's minimum spanning tree */
+    public static int getMinDistance(int[][] dists, int minDistance) {
+        // sets the first Vertex to have a weight of 0
         vertices[0].setWeight(0);
+        // sets the first Vertex to have a parent of -1
         vertices[0].setParent(-1);
+        // loops over all vertices except the last
         for (int i = 0; i < vertices.length - 1; i++) {
+            // the smallest index in the vertices array
             int min_index = getSmallestIndex();
+            // marks that Vertex as visited
             vertices[min_index].markVisited();
+            // loops over the vertices array
             for (int j = 0; j < vertices.length; j++) {
-                if (graph[min_index][j] != 0 && !vertices[j].isVisited() && graph[min_index][j] < vertices[j].getWeight()) {
+                // checks if the weight of the array's index is not 0, the current vertex has not been visited, and the weight of the array's index is less the Vertex's weight
+                // if so, it sets the parent to the min index and sets the weight as the array's index
+                if (dists[min_index][j] != 0 && !vertices[j].isVisited() && dists[min_index][j] < vertices[j].getWeight()) {
                     vertices[j].setParent(min_index);
-                    vertices[j].setWeight(graph[min_index][j]);
+                    vertices[j].setWeight(dists[min_index][j]);
                 }
             }
         }
 
-        System.out.println("Edge \tWeight");
+        System.out.println("Edge \t Weight");
+        // loops over the vertices starting from the first index and sums the weights
         for (int i = 1; i < vertices.length; i++) {
             minDistance += vertices[i].getWeight();
             System.out.println(vertices[i].getParent() + " - " + i + "\t" + vertices[i].getWeight());
@@ -157,11 +163,17 @@ public class Graph {
         return minDistance;
     }
 
+    /** Returns the smallest index
+     * @return The smallest index */
     public static int getSmallestIndex() {
+        // initializes the minimum value and the minimum index
         int min = Integer.MAX_VALUE, min_index = -1;
+        // loops over the vertices
         for (int i = 0; i < vertices.length; i++) {
+            // checks if the current vertex has been visited and if its weight is less than the current min
+            // if so, the current min is set to the current Vertex's weight and the minimum index is set to the current index
             if (!vertices[i].isVisited() && vertices[i].getWeight() < min) {
-                min = vertices[i].getData();
+                min = vertices[i].getWeight();
                 min_index = i;
             }
         }
