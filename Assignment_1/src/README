@@ -1,0 +1,6 @@
+- The main class was added to run the code in its own class in a more readable way and to cut down on an unnecessarily long CourseList file.
+
+- The printCourseList method was added to display the courseList neatly and with enumeration of the elements
+
+- The incrementation and decrementation used in the addCourse and removeCourse methods was used to update the number of courses in the list without having to use a for loop to go through the list of courses each time the size method is called
+- this is also why the coursesInList field is used
