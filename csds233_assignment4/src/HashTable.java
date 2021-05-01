@@ -123,8 +123,15 @@ public class HashTable {
         for (Entry entry : table) {
             // loops while the current Entry is not null
             while (entry != null) {
-                // inserts the Entry into the new HashTable
-                newHashTable.insert(entry.getCharacter(), entry.getFrequency());
+                // hash index of new table hash
+                int hashIndex = hash(entry.getCharacter());
+                // front of the new hashtable
+                Entry front = newHashTable.table[hashIndex];
+                // sets the hash index to a new Entry
+                newHashTable.table[hashIndex] = new Entry(entry.getCharacter(), entry.getFrequency());
+                if (front != null) {
+                    newHashTable.table[hashIndex].setNext(front);
+                }
                 entry = entry.getNext();
             }
         }
